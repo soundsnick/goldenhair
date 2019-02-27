@@ -52,4 +52,4 @@ if __name__=="__main__":
                 print("\033[1;30;42m "+name+' \033[0m', end='')
                 print("\033[1;30;43m "+fromus+' \033[0m', end='')
                 print(' : '+mes['text'])
-                time.sleep(0.5)
+                time.sleep(1)
