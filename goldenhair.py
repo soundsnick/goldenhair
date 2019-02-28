@@ -6,6 +6,8 @@ import time
 import argparse
 import sys
 import os
+import subprocess as s
+
 
 
 
@@ -13,8 +15,8 @@ import os
 # __token: VK user access_token
 # __version: VK API version
 ApiConfig = {
-    'token': 'a26452685581733ea9f3f05057250fe5104a2793880e1689a9decffddf93f9d76b76e5dc22e28b02b6ea5',
-    # 'token': '4321422f6a75aa06d4ef83317b88d39c7ad6f1fe96517d322f8f0efbd886204e6205d8ecf1f54c90d61d5',
+    # 'token': 'a26452685581733ea9f3f05057250fe5104a2793880e1689a9decffddf93f9d76b76e5dc22e28b02b6ea5',
+    'token': '4321422f6a75aa06d4ef83317b88d39c7ad6f1fe96517d322f8f0efbd886204e6205d8ecf1f54c90d61d5',
     'version': '5.80',
     'conversation': 2000000045,
     'conversationShort': 45
@@ -83,3 +85,24 @@ if __name__=="__main__":
                 print(' : '+mes['text']+' ', end='')
                 print("\033[1;32;29m "+time.strftime('%Y-%m-%d %H:%M', time.localtime(mes['date']))+' \033[0m')
                 time.sleep(1)
+    if cmd == "longpoll":
+        data = requests.get('https://api.vk.com/method/messages.getLongPollServer',
+                            params={'access_token': ApiConfig['token'], 'v': ApiConfig['version']}).json()['response']
+        while True:
+            response = requests.get('https://{server}?act=a_check&key={key}&ts={ts}&wait=20&mode=2&version=2'.format(server=data['server'], key=data['key'], ts=data['ts'])).json()  # отправление запроса на Long Poll сервер со временем ожидания 20 и опциями ответа 2
+            updates = response['updates']
+            if updates:
+                for element in updates:
+                    # __Checking update for message
+                    # print(element)
+                    if element[0] == 4:
+                        fromu = vkapi.users.get(user_ids=element[3], access_token=ApiConfig['token'], v=ApiConfig['version'])[0]
+                        fromus = fromu['first_name'] + ' ' + fromu['last_name']
+                        if element[2] == 51:
+                            print("\033[1;30;43m Me -> "+fromus+' \033[0m', end='')
+                        else:
+                            print("\033[1;30;42m "+fromus+' -> Me \033[0m', end='')
+                        print(' : '+element[5]+' ', end='')
+                        print("\033[1;32;29m "+time.strftime('%Y-%m-%d %H:%M', time.localtime(element[4]))+' \033[0m')
+                        s.call(['notify-send', fromus,element[5]])
+                        data['ts'] = response['ts']
