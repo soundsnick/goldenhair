@@ -27,6 +27,7 @@ vkapi = vk.API(session, version=ApiConfig['version'])
 def arguments():
   parser = argparse.ArgumentParser()
   parser.add_argument("--cmd")
+  parser.add_argument("--user_id")
   args = parser.parse_args()
 
   if not (args.cmd):
@@ -34,10 +35,14 @@ def arguments():
     sys.exit(0)
   else:
     cmd = args.cmd
-  return cmd
+    if not (args.user_id):
+      user_id = -1
+    else:
+      user_id = args.user_id
+  return cmd, user_id
 
 if __name__=="__main__":
-    cmd = arguments()
+    cmd, user_id = arguments()
     if cmd == "conversations":
         conversation = vkapi.messages.getConversations(access_token=ApiConfig['token'], v=ApiConfig['version'])
         for item in conversation['items']:
@@ -50,6 +55,24 @@ if __name__=="__main__":
                 fromu = vkapi.users.get(user_ids=mes['from_id'], access_token=ApiConfig['token'], v=ApiConfig['version'])[0]
                 fromus = fromu['first_name'] + ' ' + fromu['last_name']
                 print("\033[1;30;42m "+name+' \033[0m', end='')
+                print("\033[1;29;44m "+str(user['id'])+' \033[0m', end='')
                 print("\033[1;30;43m "+fromus+' \033[0m', end='')
                 print(' : '+mes['text'])
+                time.sleep(1)
+    if cmd == "mes":
+        cmd, user_id = arguments()
+        if int(user_id) < 0:
+            print("WRONG USER ID")
+        else:
+            messages = vkapi.messages.getHistory(user_id=user_id, count=150, access_token=ApiConfig['token'], v=ApiConfig['version'])
+            for mes in messages['items']:
+                fromu = vkapi.users.get(user_ids=mes['from_id'], access_token=ApiConfig['token'], v=ApiConfig['version'])[0]
+                fromus = fromu['first_name'] + ' ' + fromu['last_name']
+
+                if int(mes['from_id']) == 293241527:
+                    print("\033[1;30;43m "+fromus+' \033[0m', end='')
+                else:
+                    print("\033[1;30;42m "+fromus+' \033[0m', end='')
+                print(' : '+mes['text']+' ', end='')
+                print("\033[1;32;29m "+time.strftime('%Y-%m-%d %H:%M', time.localtime(mes['date']))+' \033[0m')
                 time.sleep(1)
