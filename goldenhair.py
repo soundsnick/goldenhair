@@ -25,21 +25,26 @@ session = vk.Session(access_token=ApiConfig['token'])
 vkapi = vk.API(session, version=ApiConfig['version'])
 
 def arguments():
-  parser = argparse.ArgumentParser()
-  parser.add_argument("--cmd")
-  parser.add_argument("--user_id")
-  args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cmd")
+    parser.add_argument("--user_id")
+    parser.add_argument("--count")
+    args = parser.parse_args()
 
-  if not (args.cmd):
-    print(" --- Command! ---")
-    sys.exit(0)
-  else:
-    cmd = args.cmd
+    if not (args.cmd):
+        print(" --- Command! ---")
+        sys.exit(0)
+    else:
+        cmd = args.cmd
     if not (args.user_id):
       user_id = -1
     else:
       user_id = args.user_id
-  return cmd, user_id
+    if not (args.count):
+      user_id = -1
+    else:
+      user_id = args.count
+    return cmd, user_id, count
 
 if __name__=="__main__":
     cmd, user_id = arguments()
@@ -63,6 +68,8 @@ if __name__=="__main__":
         cmd, user_id = arguments()
         if int(user_id) < 0:
             print("WRONG USER ID")
+        if int(count) < 0:
+            print("WRONG COUNT")
         else:
             messages = vkapi.messages.getHistory(user_id=user_id, count=150, access_token=ApiConfig['token'], v=ApiConfig['version'])
             for mes in messages['items']:
