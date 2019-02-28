@@ -47,7 +47,7 @@ def arguments():
     return cmd, user_id, count
 
 if __name__=="__main__":
-    cmd, user_id = arguments()
+    cmd, user_id, count = arguments()
     if cmd == "conversations":
         conversation = vkapi.messages.getConversations(access_token=ApiConfig['token'], v=ApiConfig['version'])
         for item in conversation['items']:
@@ -65,13 +65,13 @@ if __name__=="__main__":
                 print(' : '+mes['text'])
                 time.sleep(1)
     if cmd == "mes":
-        cmd, user_id = arguments()
+        cmd, user_id, count = arguments()
         if int(user_id) < 0:
             print("WRONG USER ID")
         if int(count) < 0:
             print("WRONG COUNT")
         else:
-            messages = vkapi.messages.getHistory(user_id=user_id, count=150, access_token=ApiConfig['token'], v=ApiConfig['version'])
+            messages = vkapi.messages.getHistory(user_id=user_id, count=count, access_token=ApiConfig['token'], v=ApiConfig['version'])
             for mes in messages['items']:
                 fromu = vkapi.users.get(user_ids=mes['from_id'], access_token=ApiConfig['token'], v=ApiConfig['version'])[0]
                 fromus = fromu['first_name'] + ' ' + fromu['last_name']
