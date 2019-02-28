@@ -104,5 +104,5 @@ if __name__=="__main__":
                             print("\033[1;30;42m "+fromus+' -> Me \033[0m', end='')
                         print(' : '+element[5]+' ', end='')
                         print("\033[1;32;29m "+time.strftime('%Y-%m-%d %H:%M', time.localtime(element[4]))+' \033[0m')
-                        s.call(['notify-send', fromus,element[5]])
+                        # s.call(['notify-send', fromus,element[5]])
                         data['ts'] = response['ts']
