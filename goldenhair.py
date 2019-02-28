@@ -15,8 +15,8 @@ import subprocess as s
 # __token: VK user access_token
 # __version: VK API version
 ApiConfig = {
-    # 'token': 'a26452685581733ea9f3f05057250fe5104a2793880e1689a9decffddf93f9d76b76e5dc22e28b02b6ea5',
-    'token': '4321422f6a75aa06d4ef83317b88d39c7ad6f1fe96517d322f8f0efbd886204e6205d8ecf1f54c90d61d5',
+    'token': 'a26452685581733ea9f3f05057250fe5104a2793880e1689a9decffddf93f9d76b76e5dc22e28b02b6ea5',
+    # 'token': '4321422f6a75aa06d4ef83317b88d39c7ad6f1fe96517d322f8f0efbd886204e6205d8ecf1f54c90d61d5',
     'version': '5.80',
     'conversation': 2000000045,
     'conversationShort': 45
