@@ -41,9 +41,9 @@ def arguments():
     else:
       user_id = args.user_id
     if not (args.count):
-      user_id = -1
+      count = -1
     else:
-      user_id = args.count
+      count = args.count
     return cmd, user_id, count
 
 if __name__=="__main__":
