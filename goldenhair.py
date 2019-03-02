@@ -15,11 +15,9 @@ import subprocess as s
 # __token: VK user access_token
 # __version: VK API version
 ApiConfig = {
-    'token': 'a26452685581733ea9f3f05057250fe5104a2793880e1689a9decffddf93f9d76b76e5dc22e28b02b6ea5',
-    # 'token': '4321422f6a75aa06d4ef83317b88d39c7ad6f1fe96517d322f8f0efbd886204e6205d8ecf1f54c90d61d5',
+    'token': 'USERS_VK_ACCESS_TOKEN',
     'version': '5.80',
-    'conversation': 2000000045,
-    'conversationShort': 45
+    'myid': 'MY_VK_ID'
 }
 
 
@@ -77,17 +75,17 @@ if __name__=="__main__":
             for mes in messages['items']:
                 fromu = vkapi.users.get(user_ids=mes['from_id'], access_token=ApiConfig['token'], v=ApiConfig['version'])[0]
                 fromus = fromu['first_name'] + ' ' + fromu['last_name']
-                if int(mes['from_id']) == 293241527:
+                if int(mes['from_id']) == ApiConfig['myid']:
                     print("\033[1;30;43m "+fromus+' \033[0m', end='')
                 else:
                     print("\033[1;30;42m "+fromus+' \033[0m', end='')
                 if mes['text'] != '':
                     print(' : '+mes['text']+' ', end='')
                 else:
-                    if len(mes['attachments'][0]['sticker']['images']) > 0:
+                    if 'sticker' in mes['attachments'][0]:
                         print(' : STICKER | '+mes['attachments'][0]['sticker']['images'][4]['url']+' ', end='')
                     else:
-                        print(' : *ATTACHMENT* ', end='')
+                        print(mes['attachments'], end='')
                 print("\033[1;32;29m "+time.strftime('%Y-%m-%d %H:%M', time.localtime(mes['date']))+' \033[0m')
                 time.sleep(1)
     if cmd == "longpoll":
